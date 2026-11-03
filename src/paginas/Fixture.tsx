@@ -1,18 +1,20 @@
 import { useSearchParams } from 'react-router';
 import { Escudo } from '../componentes/Escudo';
-import { FilaPartido } from '../componentes/Partidos';
-import { club, libreDe, partidosDeFecha } from '../data/consultas';
+import { FilaPartido, SelectorTemporada } from '../componentes/Partidos';
+import { club, fechasDe, libreDe, partidosDeFecha, temporadas } from '../data/consultas';
 import { LIGA } from '../data/liga';
 import type { TipoTorneo } from '../data/tipos';
 import { diaLargo } from '../lib/formato';
-
-const TEMPORADAS = [2026, 2025, 2024];
 
 export function Fixture() {
   const [params, setParams] = useSearchParams();
   const temporada = Number(params.get('temporada') ?? LIGA.ahora.temporada);
   const torneo = (params.get('torneo') ?? (temporada === LIGA.ahora.temporada ? LIGA.ahora.torneo : 'Clausura')) as TipoTorneo;
-  const fecha = Number(params.get('fecha') ?? (temporada === LIGA.ahora.temporada && torneo === LIGA.ahora.torneo ? LIGA.ahora.fecha : 13));
+  const totalFechas = fechasDe(LIGA, temporada, torneo === 'Final' ? 'Apertura' : torneo);
+  const fecha = Math.min(
+    totalFechas || 1,
+    Number(params.get('fecha') ?? (temporada === LIGA.ahora.temporada && torneo === LIGA.ahora.torneo ? LIGA.ahora.fecha : totalFechas))
+  );
   const cambiar = (cambios: Record<string, string | number>) => {
     const p = new URLSearchParams(params);
     for (const [k, v] of Object.entries(cambios)) p.set(k, String(v));
@@ -31,13 +33,7 @@ export function Fixture() {
       </header>
 
       <div className="filtros">
-        <div className="chips" role="group" aria-label="Temporada">
-          {TEMPORADAS.map(t => (
-            <button key={t} type="button" className="chip" aria-pressed={t === temporada} onClick={() => cambiar({ temporada: t, torneo: 'Apertura', fecha: 1 })}>
-              {t}
-            </button>
-          ))}
-        </div>
+        <SelectorTemporada valor={temporada} temporadas={temporadas(LIGA)} onCambio={t => cambiar({ temporada: t, torneo: 'Clausura', fecha: 1 })} />
         <div className="chips" role="group" aria-label="Torneo">
           {(['Apertura', 'Clausura'] as const).map(t => (
             <button key={t} type="button" className="chip" aria-pressed={t === torneo} onClick={() => cambiar({ torneo: t, fecha: 1 })}>
@@ -52,7 +48,7 @@ export function Fixture() {
         </div>
         {torneo !== 'Final' && (
           <div className="chips fechas" role="group" aria-label="Fecha">
-            {Array.from({ length: 13 }, (_, i) => i + 1).map(f => (
+            {Array.from({ length: totalFechas }, (_, i) => i + 1).map(f => (
               <button key={f} type="button" className="chip num" aria-pressed={f === fecha} onClick={() => cambiar({ fecha: f })}>
                 {f}
               </button>

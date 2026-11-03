@@ -43,6 +43,7 @@ export interface PasoPorClub {
   club: ClubId;
   desde: number; // año
   hasta: number | null; // null = actual
+  dorsal?: number; // camiseta en ese club
 }
 
 export interface Jugador {
@@ -55,7 +56,8 @@ export interface Jugador {
   nacimiento: string; // AAAA-MM-DD
   lugarNacimiento: string; // «General Madariaga», «Mar del Plata»…
   nacionalidad: string; // casi todos «Argentina»
-  club: ClubId; // club actual
+  club: ClubId; // club actual, o el último si ya no juega
+  activo: boolean; // false si se retiró o dejó la liga
   trayectoria: PasoPorClub[]; // en orden cronológico, termina en el club actual
 }
 
@@ -124,8 +126,8 @@ export interface Momento {
 export interface Liga {
   clubes: Club[];
   jugadores: Jugador[];
-  partidos: Partido[]; // 2024, 2025 y 2026, ordenados por día
-  campeones: Campeonato[]; // 1990..2025, y 2026 con apertura cargado
+  partidos: Partido[]; // 2000 a 2026, ordenados por día
+  campeones: Campeonato[]; // 1990..2025 (desde 2000, derivados de los partidos)
   sanciones: Sancion[]; // vigentes para la próxima fecha
   ahora: Momento;
   libres: Record<string, ClubId>; // clave «<temporada>-<torneo>-<fecha>»

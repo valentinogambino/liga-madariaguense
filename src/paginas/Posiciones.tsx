@@ -1,18 +1,20 @@
 import { useState } from 'react';
-import { TablaPosiciones } from '../componentes/Partidos';
-import { calcularTabla, club, tabla } from '../data/consultas';
+import { useSearchParams } from 'react-router';
+import { SelectorTemporada, TablaPosiciones } from '../componentes/Partidos';
+import { calcularTabla, club, participantesDe, tabla, temporadas } from '../data/consultas';
 import { LIGA } from '../data/liga';
 
 type Vista = 'Clausura' | 'Apertura' | 'Anual';
 
 export function Posiciones() {
-  const [temporada, setTemporada] = useState(LIGA.ahora.temporada);
+  const [params] = useSearchParams();
+  const [temporada, setTemporada] = useState(Number(params.get('temporada') ?? LIGA.ahora.temporada));
   const [vista, setVista] = useState<Vista>('Clausura');
   const filas =
     vista === 'Anual'
       ? calcularTabla(
           LIGA.partidos.filter(p => p.temporada === temporada && p.torneo !== 'Final'),
-          LIGA.clubes.map(c => c.id),
+          participantesDe(LIGA, temporada),
           id => club(LIGA, id).nombre
         )
       : tabla(LIGA, temporada, vista);
@@ -32,13 +34,7 @@ export function Posiciones() {
         </p>
       </header>
       <div className="filtros">
-        <div className="chips" role="group" aria-label="Temporada">
-          {[2026, 2025, 2024].map(t => (
-            <button key={t} type="button" className="chip" aria-pressed={t === temporada} onClick={() => setTemporada(t)}>
-              {t}
-            </button>
-          ))}
-        </div>
+        <SelectorTemporada valor={temporada} temporadas={temporadas(LIGA)} onCambio={setTemporada} />
         <div className="chips" role="group" aria-label="Torneo">
           {(['Clausura', 'Apertura', 'Anual'] as Vista[]).map(v => (
             <button key={v} type="button" className="chip" aria-pressed={v === vista} onClick={() => setVista(v)}>

@@ -4,7 +4,7 @@ import { textoGol } from '../lib/texto';
 import { Escudo } from '../componentes/Escudo';
 import { BotonCompartir } from '../componentes/Compartir';
 import { SeccionCab } from '../componentes/Partidos';
-import { club, jugador, partido as buscarPartido } from '../data/consultas';
+import { club, dorsalEn, jugador, partido as buscarPartido } from '../data/consultas';
 import { LIGA } from '../data/liga';
 import type { ClubId, Evento, Formacion, Partido as TPartido } from '../data/tipos';
 import { useConVivo } from '../lib/contextoVivo';
@@ -45,7 +45,7 @@ function Linea({ e, p }: { e: Evento; p: TPartido }) {
   );
 }
 
-function Plantilla({ f, clubId, eventos }: { f: Formacion; clubId: ClubId; eventos: Evento[] }) {
+function Plantilla({ f, clubId, eventos, temporada }: { f: Formacion; clubId: ClubId; eventos: Evento[]; temporada: number }) {
   const c = club(LIGA, clubId);
   const marcas = (id: string) => {
     const evs = eventos.filter(e => e.jugador === id || e.sale === id);
@@ -61,7 +61,7 @@ function Plantilla({ f, clubId, eventos }: { f: Formacion; clubId: ClubId; event
     return (
       <li key={id}>
         <Link to={`/jugadores/${id}`}>
-          <span className="num dorsal">{j.dorsal}</span>
+          <span className="num dorsal">{dorsalEn(LIGA, id, clubId, temporada)}</span>
           <span className="pl-nombre">{j.nombre[0]}. {j.apellido}</span>
           <span className="pl-marcas">{marcas(id)}</span>
         </Link>
@@ -176,8 +176,8 @@ function DetallePartido({ base }: { base: TPartido }) {
         <section className="pila">
           <SeccionCab titulo="Formaciones" />
           <div className="formaciones">
-            <Plantilla f={p.formaciones.local} clubId={p.local} eventos={p.eventos} />
-            <Plantilla f={p.formaciones.visitante} clubId={p.visitante} eventos={p.eventos} />
+            <Plantilla f={p.formaciones.local} clubId={p.local} eventos={p.eventos} temporada={p.temporada} />
+            <Plantilla f={p.formaciones.visitante} clubId={p.visitante} eventos={p.eventos} temporada={p.temporada} />
           </div>
         </section>
       )}

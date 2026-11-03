@@ -20,7 +20,8 @@ export function Jugador() {
 function FichaJugador({ id }: { id: string }) {
   const j = jugador(LIGA, id)!;
   const c = club(LIGA, j.club);
-  const t = LIGA.ahora.temporada;
+  // Para los que ya no juegan, la referencia es su última temporada en la liga.
+  const t = j.activo ? LIGA.ahora.temporada : (j.trayectoria.at(-1)!.hasta ?? LIGA.ahora.temporada);
   const e = estadisticasJugador(LIGA, id, t);
   const total = estadisticasJugador(LIGA, id);
   const porTemporada = estadisticasPorTemporada(LIGA, id);
@@ -30,7 +31,7 @@ function FichaJugador({ id }: { id: string }) {
   const titulos = LIGA.campeones.filter(cp =>
     j.trayectoria.some(p => p.club === cp.campeon && cp.anio >= p.desde && cp.anio <= (p.hasta ?? t))
   );
-  if (LIGA.campeonAperturaActual === j.club) titulos.push({ anio: t, campeon: j.club, subcampeon: j.club });
+  if (j.activo && LIGA.campeonAperturaActual === j.club) titulos.push({ anio: t, campeon: j.club, subcampeon: j.club });
 
   const partidos = partidosDeClub(LIGA, j.club, t)
     .filter(p => p.formaciones && [...p.formaciones.local.titulares, ...p.formaciones.visitante.titulares, ...p.eventos.filter(x => x.tipo === 'cambio').map(x => x.jugador)].includes(id))
@@ -70,6 +71,7 @@ function FichaJugador({ id }: { id: string }) {
           </h1>
           <span className="etiqueta">
             {POSICIONES[j.posicion]} · Camiseta {j.dorsal}
+            {!j.activo && ` · Jugó hasta ${t}`}
             {j.apodo ? ` · «${j.apodo}»` : ''}
           </span>
         </div>
@@ -99,7 +101,7 @@ function FichaJugador({ id }: { id: string }) {
       <div className="grilla-2">
         <div className="pila" style={{ gap: 28 }}>
           <section className="pila">
-            <SeccionCab titulo={`Temporada ${t}`} />
+            <SeccionCab titulo={j.activo ? `Temporada ${t}` : `Última temporada · ${t}`} />
             <div className="cifras grandes">
               {([['Partidos', e.pj], ['Goles', e.goles], ['Asistencias', e.asistencias], ['Minutos', e.minutos]] as const).map(([k, v]) => (
                 <div key={k} className="cifra cifra-grande">
@@ -188,7 +190,8 @@ function FichaJugador({ id }: { id: string }) {
                       <b>{club(LIGA, p.club).nombre}</b>
                     </Link>
                     <span className="texto-2">
-                      {p.desde}–{p.hasta ?? 'hoy'}
+                      {p.desde === p.hasta ? p.desde : `${p.desde}–${p.hasta ?? 'hoy'}`}
+                      {p.dorsal ? ` · camiseta ${p.dorsal}` : ''}
                     </span>
                   </span>
                 </li>

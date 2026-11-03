@@ -134,6 +134,21 @@ export function TablaPosiciones({ filas, resumida = false, resaltar }: { filas: 
   );
 }
 
+export function SelectorTemporada({ valor, onCambio, temporadas }: { valor: number; onCambio: (t: number) => void; temporadas: number[] }) {
+  return (
+    <label className="selector-temporada">
+      <span className="etiqueta">Temporada</span>
+      <select value={valor} onChange={e => onCambio(Number(e.target.value))}>
+        {temporadas.map(t => (
+          <option key={t} value={t}>
+            {t}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 export function SeccionCab({ titulo, enlace, texto }: { titulo: string; enlace?: string; texto?: string }) {
   return (
     <div className="seccion-cab">

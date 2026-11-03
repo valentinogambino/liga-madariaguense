@@ -48,7 +48,7 @@ export function Comparar() {
   return (
     <div className="pila" style={{ gap: 24 }}>
       <header className="titulo-pagina">
-        <span className="etiqueta">Historial 2024–2026</span>
+        <span className="etiqueta">Historial desde 2000</span>
         <h1>Cara a cara</h1>
       </header>
 

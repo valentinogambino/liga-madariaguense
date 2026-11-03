@@ -11,13 +11,27 @@ describe('generarLiga', () => {
     expect(JSON.stringify(generarLiga(2026))).toBe(JSON.stringify(liga));
   });
 
-  it('arma 13 fechas de 6 partidos por torneo y cada club juega 12', () => {
-    for (const t of [2024, 2025, 2026])
+  it('tiene detalle desde 2000: 12 clubes hasta 2010 y 13 desde que entra Arena', () => {
+    for (let t = 2000; t <= 2026; t++)
       for (const torneo of ['Apertura', 'Clausura'] as const) {
         const ps = liga.partidos.filter(p => p.temporada === t && p.torneo === torneo);
-        expect(ps).toHaveLength(78);
-        for (const c of liga.clubes) expect(ps.filter(p => p.local === c.id || p.visitante === c.id)).toHaveLength(12);
+        const n = t >= 2011 ? 13 : 12;
+        expect(ps).toHaveLength(((n * (n - 1)) / 2) | 0);
+        const participantes = liga.clubes.filter(c => t >= 2011 || c.id !== 'arena');
+        for (const c of participantes) expect(ps.filter(p => p.local === c.id || p.visitante === c.id)).toHaveLength(n - 1);
       }
+  });
+
+  it('las formaciones usan jugadores que estaban en el club esa temporada', () => {
+    const porId = new Map(liga.jugadores.map(j => [j.id, j]));
+    for (const p of liga.partidos.filter((_, i) => i % 7 === 0)) {
+      if (!p.formaciones) continue;
+      for (const [club, f] of [[p.local, p.formaciones.local], [p.visitante, p.formaciones.visitante]] as const)
+        for (const id of [...f.titulares, ...f.suplentes]) {
+          const j = porId.get(id)!;
+          expect(j.trayectoria.some(x => x.club === club && x.desde <= p.temporada && (x.hasta ?? 9999) >= p.temporada)).toBe(true);
+        }
+    }
   });
 
   it('los goles de los eventos coinciden con el resultado', () => {
@@ -58,7 +72,7 @@ describe('generarLiga', () => {
 
   it('tiene 22 jugadores por club con dorsales únicos y sin DNI', () => {
     for (const c of liga.clubes) {
-      const js = liga.jugadores.filter(j => j.club === c.id);
+      const js = liga.jugadores.filter(j => j.club === c.id && j.activo);
       expect(js).toHaveLength(22);
       expect(new Set(js.map(j => j.dorsal)).size).toBe(22);
     }
@@ -71,6 +85,7 @@ describe('generarLiga', () => {
     for (const c of liga.campeones) {
       const club = liga.clubes.find(x => x.id === c.campeon)!;
       expect(c.anio).toBeGreaterThan(club.fundacion);
+      if (c.anio >= 2000) expect(c.apertura).toBeDefined();
     }
     expect(liga.campeones.map(c => c.anio)).toEqual(Array.from({ length: 36 }, (_, i) => 1990 + i));
     expect(titulosPorClub(liga)[0]!.anios.length).toBeGreaterThan(3);
@@ -81,6 +96,6 @@ describe('generarLiga', () => {
   it('genera rápido', () => {
     const t0 = performance.now();
     generarLiga(7);
-    expect(performance.now() - t0).toBeLessThan(400);
+    expect(performance.now() - t0).toBeLessThan(2500);
   });
 });

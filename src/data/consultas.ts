@@ -75,16 +75,37 @@ export const nombreJugador = (j: Jugador) => `${j.nombre} ${j.apellido}`;
 
 export function tabla(liga: Liga, temporada: number, torneo: Exclude<TipoTorneo, 'Final'>): FilaTabla[] {
   return memo(liga, `tabla-${temporada}-${torneo}`, () =>
-    calcularTabla(
-      liga.partidos.filter(p => p.temporada === temporada && p.torneo === torneo),
-      liga.clubes.map(c => c.id),
-      id => club(liga, id).nombre
-    )
+    {
+      const ps = liga.partidos.filter(p => p.temporada === temporada && p.torneo === torneo);
+      return calcularTabla(ps, participantesDe(liga, temporada), id => club(liga, id).nombre);
+    }
   );
 }
 
+// Clubes que jugaron Primera esa temporada (Arena recién desde 2011).
+export const participantesDe = (liga: Liga, temporada: number): ClubId[] =>
+  memo(liga, `part-${temporada}`, () => {
+    const ids = new Set(liga.partidos.filter(p => p.temporada === temporada).flatMap(p => [p.local, p.visitante]));
+    return liga.clubes.map(c => c.id).filter(c => ids.has(c));
+  });
+
 export function partidosDeFecha(liga: Liga, temporada: number, torneo: TipoTorneo, fecha: number): Partido[] {
   return liga.partidos.filter(p => p.temporada === temporada && p.torneo === torneo && p.fecha === fecha);
+}
+
+export const temporadas = (liga: Liga): number[] =>
+  memo(liga, 'temporadas', () => [...new Set(liga.partidos.map(p => p.temporada))].sort((a, b) => b - a));
+
+export const fechasDe = (liga: Liga, temporada: number, torneo: TipoTorneo): number =>
+  memo(liga, `fechas-${temporada}-${torneo}`, () =>
+    Math.max(0, ...liga.partidos.filter(p => p.temporada === temporada && p.torneo === torneo).map(p => p.fecha))
+  );
+
+// Dorsal que usaba el jugador en ese club y esa temporada (cambia si pasó por varios clubes).
+export function dorsalEn(liga: Liga, id: string, c: ClubId, temporada: number): number | undefined {
+  const j = jugador(liga, id);
+  const paso = j?.trayectoria.find(x => x.club === c && x.desde <= temporada && (x.hasta === null || x.hasta >= temporada));
+  return paso?.dorsal ?? j?.dorsal;
 }
 
 export const libreDe = (liga: Liga, temporada: number, torneo: TipoTorneo, fecha: number): ClubId | undefined =>
@@ -108,7 +129,7 @@ export const partidoEnVivo = (liga: Liga): Partido | undefined => liga.partidos.
 
 export function plantel(liga: Liga, c: ClubId): Jugador[] {
   const orden = { ARQ: 0, DEF: 1, MED: 2, DEL: 3 } as const;
-  return liga.jugadores.filter(j => j.club === c).sort((a, b) => orden[a.posicion] - orden[b.posicion] || a.dorsal - b.dorsal);
+  return liga.jugadores.filter(j => j.club === c && j.activo).sort((a, b) => orden[a.posicion] - orden[b.posicion] || a.dorsal - b.dorsal);
 }
 
 export function partidosDeClub(liga: Liga, c: ClubId, temporada?: number): Partido[] {
@@ -194,12 +215,14 @@ export function estadisticasJugador(liga: Liga, id: string, temporada?: number, 
 
 export function estadisticasPorTemporada(liga: Liga, id: string): { temporada: number; club: ClubId | undefined; e: EstadJugador }[] {
   const temporadas = [...new Set(liga.partidos.map(p => p.temporada))].sort();
-  return temporadas.map(t => {
-    const e = estadisticasJugador(liga, id, t);
-    const j = jugador(liga, id);
-    const paso = j?.trayectoria.find(x => x.desde <= t && (x.hasta === null || x.hasta >= t));
-    return { temporada: t, club: paso?.club, e };
-  });
+  return temporadas
+    .map(t => {
+      const e = estadisticasJugador(liga, id, t);
+      const j = jugador(liga, id);
+      const paso = j?.trayectoria.find(x => x.desde <= t && (x.hasta === null || x.hasta >= t));
+      return { temporada: t, club: paso?.club, e };
+    })
+    .filter(r => r.club || r.e.pj > 0);
 }
 
 export interface Ranking {

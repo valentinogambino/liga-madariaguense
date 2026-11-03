@@ -1,10 +1,10 @@
 import { useDeferredValue, useState } from 'react';
 import { Link } from 'react-router';
 import { Escudo } from '../componentes/Escudo';
-import { FilaPartido, SeccionCab } from '../componentes/Partidos';
+import { FilaPartido, SeccionCab, SelectorTemporada } from '../componentes/Partidos';
 import {
   amonestados, asistidores, buscar, club, fairPlay, goleadores, jugador, masMinutos, nombreJugador, partido,
-  titulosPorClub, vallaMenosVencida, type Ranking
+  temporadas, titulosPorClub, vallaMenosVencida, type Ranking
 } from '../data/consultas';
 import { LIGA } from '../data/liga';
 import type { TipoTorneo } from '../data/tipos';
@@ -24,7 +24,8 @@ export function LaLiga() {
         <p>
           La Liga Madariaguense de Fútbol organiza el fútbol de General Madariaga, Pinamar, Ostende, Valeria del Mar y
           Villa Gesell. Primera se juega en dos torneos por año, Apertura y Clausura, todos contra todos a una rueda; si
-          los ganadores son distintos, una final define al campeón de la temporada.
+          los ganadores son distintos, una final define al campeón de la temporada. Desde 2000 están todos los partidos,
+          con goles, tarjetas y formaciones; de 1990 a 1999, el campeón y el subcampeón.
         </p>
       </header>
       <div className="grilla-2">
@@ -38,7 +39,15 @@ export function LaLiga() {
                   <Escudo id={c.campeon} tam={24} />
                   <b>{club(LIGA, c.campeon).nombre}</b>
                 </Link>
-                <span className="texto-2 cp-sub">Sub: {club(LIGA, c.subcampeon).corto}</span>
+                <span className="texto-2 cp-sub">
+                  {c.apertura ? (
+                    <Link to={`/posiciones?temporada=${c.anio}`}>
+                      Ap. {club(LIGA, c.apertura).sigla} · Cl. {club(LIGA, c.clausura!).sigla}
+                    </Link>
+                  ) : (
+                    `Sub: ${club(LIGA, c.subcampeon).corto}`
+                  )}
+                </span>
               </li>
             ))}
           </ol>
@@ -129,7 +138,7 @@ function Ranking({ titulo, filas, unidad }: { titulo: string; filas: Ranking[]; 
 }
 
 export function Estadisticas() {
-  const t = LIGA.ahora.temporada;
+  const [t, setT] = useState(LIGA.ahora.temporada);
   const [torneo, setTorneo] = useState<TipoTorneo | 'Temporada'>('Clausura');
   const tr = torneo === 'Temporada' ? undefined : torneo;
   const vallas = vallaMenosVencida(LIGA, t, torneo === 'Apertura' ? 'Apertura' : 'Clausura').slice(0, 5);
@@ -140,6 +149,7 @@ export function Estadisticas() {
         <span className="etiqueta">Primera · {t}</span>
         <h1>Estadísticas</h1>
       </header>
+      <SelectorTemporada valor={t} temporadas={temporadas(LIGA)} onCambio={setT} />
       <div className="chips" role="group" aria-label="Torneo">
         {(['Clausura', 'Apertura', 'Temporada'] as const).map(x => (
           <button key={x} type="button" className="chip" aria-pressed={x === torneo} onClick={() => setTorneo(x)}>

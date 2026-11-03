@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router';
+import { Campanas } from '../componentes/Campanas';
 import { Escudo } from '../componentes/Escudo';
 import { FilaPartido, Forma, SeccionCab } from '../componentes/Partidos';
 import { Silueta } from '../componentes/Silueta';
@@ -160,6 +161,8 @@ export function Club() {
               </div>
             </div>
           </section>
+
+          <Campanas clubId={c.id} />
 
           <section className="pila">
             <SeccionCab titulo="Palmarés" />
