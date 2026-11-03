@@ -1,0 +1,113 @@
+base de datos existente
+
+visualizacion de la informacion 
+
+
+
+jugadores
+
+
+
+clubes
+
+
+vs entre clubes
+
+
+
+vs
+
+
+objetivos
+
+recaudar la informcion
+
+2 juntr la info
+
+
+
+enfocado al celu
+
+
+
+visualizador con resultados recientes con movimiento
+
+mostrar la info e historia
+
+fotos
+
+
+comet
+
+la madariagense de futbol
+
+pinamar y villa gessell
+
+
+jugador
+
+dni
+
+camiseta
+
+fehca de nac / edad
+
+lugar de nacimiento / nacionalidad
+
+historia de clubes
+
+goles
+
+amarillas
+
+rojas !
+
+expulsiones !
+
+minutos en cancha ?
+
+penales?
+
+titular, entro del banco o fue al banco !
+
+firmo planillo y no ingreso?
+
+foto con camiseta
+
+titulo !
+
+cuota societaria y publicidad
+
+clubes
+
+titulos
+
+fotos de los estadios
+
+seneia historia
+
+fech ade fundacion
+
+palmares
+
+liga
+
+
+lanzamiento bd marzo final
+
+
+Los 13 clubes
+Equipo	Localidad
+Atlético Cosme	General Madariaga
+Deportivo El León	General Madariaga
+Juventud Unida	General Madariaga
+Los del Clan	General Madariaga
+Racing Club	General Madariaga
+Atlético San Vicente	Pinamar
+Deportivo Pinamar	Pinamar
+Arena FC	Pinamar
+Nuevo Amanecer	Ostende
+Defensores de Valeria	Valeria del Mar
+Atlético Villa Gesell	Villa Gesell
+San Lorenzo	Villa Gesell
+Golf Club	Villa Gesell
