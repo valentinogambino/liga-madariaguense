@@ -3,7 +3,7 @@ import type { Club } from './tipos';
 // Nombre, localidad, escudo y colores son reales. Fundación, estadio e historia son inventados para la demo
 // (las coordenadas caen dentro de cada localidad, no en la cancha real).
 
-const esc = (id: string) => `/escudos/${id}.png`;
+const esc = (id: string) => `${import.meta.env.BASE_URL}escudos/${id}.png`;
 
 export const CLUBES: Club[] = [
   {

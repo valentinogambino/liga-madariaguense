@@ -30,7 +30,7 @@ function Icono({ d }: { d: string }) {
 function Marca() {
   return (
     <Link to="/" className="marca" aria-label="Liga Madariaguense de Fútbol, inicio">
-      <img src="/favicon.svg" alt="" width="30" height="35" />
+      <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width="30" height="35" />
       <span>
         <b>Liga Madariaguense</b>
         <small>de Fútbol · Primera</small>

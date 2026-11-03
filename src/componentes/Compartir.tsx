@@ -48,7 +48,7 @@ function fondo(ctx: CanvasRenderingContext2D, a: string, b: string) {
 }
 
 async function pie(ctx: CanvasRenderingContext2D) {
-  const logo = await cargar('/favicon.svg');
+  const logo = await cargar(`${import.meta.env.BASE_URL}favicon.svg`);
   ctx.drawImage(logo, 90, ALTO - 190, 60, 70);
   ctx.fillStyle = '#e9ece6';
   ctx.font = f(NUM, 40);

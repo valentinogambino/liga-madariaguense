@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { Estructura } from './componentes/Estructura';
 import { ProveedorEnVivo } from './lib/enVivo';
 import { Club } from './paginas/Club';
@@ -12,9 +12,12 @@ import { Partido } from './paginas/Partido';
 import { Posiciones } from './paginas/Posiciones';
 import { Buscar, Canchas, Estadisticas, LaLiga, Sanciones } from './paginas/Varias';
 
+// En el artifact de claude.ai no se puede navegar por ruta: ahí el router vive en memoria.
+const Router = import.meta.env.MODE === 'artifact' ? MemoryRouter : BrowserRouter;
+
 export function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <ProveedorEnVivo>
         <Routes>
           <Route element={<Estructura />}>
@@ -35,6 +38,6 @@ export function App() {
           </Route>
         </Routes>
       </ProveedorEnVivo>
-    </BrowserRouter>
+    </Router>
   );
 }

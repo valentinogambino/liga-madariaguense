@@ -2,9 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  // Modo «artifact»: rutas relativas, sin service worker, salida aparte para publicar en claude.ai.
+  base: mode === 'artifact' ? './' : '/',
   plugins: [
     react(),
+    mode !== 'artifact' &&
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'escudos/*.png'],
@@ -27,6 +30,7 @@ export default defineConfig({
     })
   ],
   build: {
+    outDir: mode === 'artifact' ? 'dist-artifact' : 'dist',
     rollupOptions: {
       output: {
         manualChunks: {
@@ -38,4 +42,4 @@ export default defineConfig({
   },
   server: { port: 5180 },
   preview: { port: 5181 }
-});
+}));
