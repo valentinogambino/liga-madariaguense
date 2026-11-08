@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({ mode }) => ({
   // Modo «artifact»: rutas relativas, sin service worker, salida aparte para publicar en claude.ai.
-  base: mode === 'artifact' ? './' : '/',
+  base: mode === 'artifact' ? './' : mode === 'pages' ? '/liga-madariaguense/' : '/',
   plugins: [
     react(),
     mode !== 'artifact' &&
@@ -19,18 +19,19 @@ export default defineConfig(({ mode }) => ({
         theme_color: '#0c110e',
         background_color: '#0c110e',
         display: 'standalone',
-        start_url: '/',
+        start_url: './',
+        scope: './',
         icons: [
-          { src: '/iconos/icono-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/iconos/icono-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/iconos/icono-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+          { src: 'iconos/icono-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'iconos/icono-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'iconos/icono-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
         ]
       },
       workbox: { globPatterns: ['**/*.{js,css,html,png,svg,woff2}'] }
     })
   ],
   build: {
-    outDir: mode === 'artifact' ? 'dist-artifact' : 'dist',
+    outDir: mode === 'artifact' ? 'dist-artifact' : mode === 'pages' ? 'dist-pages' : 'dist',
     rollupOptions: {
       output: {
         manualChunks: {

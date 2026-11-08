@@ -11,6 +11,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:artifact": "tsc -b && vite build --mode artifact",
+    "build:pages": "tsc -b && vite build --mode pages && node scripts/preparar_pages.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",

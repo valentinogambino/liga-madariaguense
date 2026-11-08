@@ -10,6 +10,7 @@ tmp/
 .agents/skills
 *.log
 dist-artifact/
+dist-pages/
 .claude/skills/
 .agents/skills/
 .claude/agents/

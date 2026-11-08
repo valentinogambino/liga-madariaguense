@@ -12,32 +12,32 @@ import { Partido } from './paginas/Partido';
 import { Posiciones } from './paginas/Posiciones';
 import { Buscar, Canchas, Estadisticas, LaLiga, Sanciones } from './paginas/Varias';
 
-// En el artifact de claude.ai no se puede navegar por ruta: ahí el router vive en memoria.
-const Router = import.meta.env.MODE === 'artifact' ? MemoryRouter : BrowserRouter;
-
 export function App() {
-  return (
-    <Router>
-      <ProveedorEnVivo>
-        <Routes>
-          <Route element={<Estructura />}>
-            <Route index element={<Inicio />} />
-            <Route path="fixture" element={<Fixture />} />
-            <Route path="partido/:id" element={<Partido />} />
-            <Route path="posiciones" element={<Posiciones />} />
-            <Route path="clubes" element={<Clubes />} />
-            <Route path="clubes/:id" element={<Club />} />
-            <Route path="jugadores/:id" element={<Jugador />} />
-            <Route path="comparar" element={<Comparar />} />
-            <Route path="estadisticas" element={<Estadisticas />} />
-            <Route path="sanciones" element={<Sanciones />} />
-            <Route path="la-liga" element={<LaLiga />} />
-            <Route path="buscar" element={<Buscar />} />
-            <Route path="canchas" element={<Canchas />} />
-            <Route path="*" element={<NoEncontrada />} />
-          </Route>
-        </Routes>
-      </ProveedorEnVivo>
-    </Router>
+  const contenido = (
+    <ProveedorEnVivo>
+      <Routes>
+        <Route element={<Estructura />}>
+          <Route index element={<Inicio />} />
+          <Route path="fixture" element={<Fixture />} />
+          <Route path="partido/:id" element={<Partido />} />
+          <Route path="posiciones" element={<Posiciones />} />
+          <Route path="clubes" element={<Clubes />} />
+          <Route path="clubes/:id" element={<Club />} />
+          <Route path="jugadores/:id" element={<Jugador />} />
+          <Route path="comparar" element={<Comparar />} />
+          <Route path="estadisticas" element={<Estadisticas />} />
+          <Route path="sanciones" element={<Sanciones />} />
+          <Route path="la-liga" element={<LaLiga />} />
+          <Route path="buscar" element={<Buscar />} />
+          <Route path="canchas" element={<Canchas />} />
+          <Route path="*" element={<NoEncontrada />} />
+        </Route>
+      </Routes>
+    </ProveedorEnVivo>
   );
+
+  // En el artifact de claude.ai el router vive en memoria.
+  return import.meta.env.MODE === 'artifact'
+    ? <MemoryRouter>{contenido}</MemoryRouter>
+    : <BrowserRouter basename={import.meta.env.BASE_URL}>{contenido}</BrowserRouter>;
 }
