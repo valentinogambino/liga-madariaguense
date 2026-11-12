@@ -5,6 +5,7 @@ import './estilos/base.css';
 import './estilos/componentes.css';
 import './estilos/paginas.css';
 import './estilos/secciones.css';
+import './estilos/formacion.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

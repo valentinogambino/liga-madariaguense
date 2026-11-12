@@ -1,0 +1,194 @@
+/* ---------- Formación en cancha ---------- */
+
+.formacion-pagina {
+  gap: 10px;
+}
+
+.formacion-cab {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.formacion-cab h1 {
+  font: 800 clamp(24px, 6.5vw, 36px)/1 var(--f-numero);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.formacion-cab .texto-2 {
+  font-size: 12.5px;
+}
+
+.formacion-esquema {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--linea-fuerte);
+  background: var(--superficie);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+}
+
+.formacion-cuerpo {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.formacion-cancha {
+  position: relative;
+  height: min(calc(100dvh - 405px), 640px);
+  min-height: 360px;
+  aspect-ratio: 68 / 90;
+  max-width: 100%;
+  border-radius: var(--r-2);
+  overflow: hidden;
+  border: 1px solid var(--linea-fuerte);
+  background:
+    radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--club) 26%, transparent), transparent 70%),
+    var(--cesped);
+}
+
+.formacion-lineas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.formacion-jugador {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 25%;
+  display: grid;
+  justify-items: center;
+}
+
+.formacion-link {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  max-width: 100%;
+}
+
+.camiseta {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 3px solid;
+  font: 800 17px/1 var(--f-numero);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.4);
+  transition: transform 0.25s var(--ease);
+}
+
+.formacion-link:hover .camiseta {
+  transform: scale(1.1);
+}
+
+.brazalete {
+  position: absolute;
+  right: -7px;
+  top: -7px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--arena);
+  color: var(--arena-tinta);
+  font: 800 10px/1 var(--f-texto);
+  font-style: normal;
+}
+
+.camiseta-nombre {
+  max-width: 100%;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.5);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--texto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.formacion-suplentes {
+  width: 100%;
+  display: grid;
+  gap: 6px;
+}
+
+.formacion-suplentes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.formacion-suplentes li {
+  flex: none;
+  width: 64px;
+}
+
+.formacion-link.suplente .camiseta {
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  border-width: 2px;
+}
+
+@media (min-width: 900px) {
+  .formacion-cuerpo {
+    grid-template-columns: auto 220px;
+    justify-content: center;
+    align-items: start;
+    gap: 24px;
+  }
+
+  .formacion-cancha {
+    height: min(calc(100dvh - 300px), 720px);
+  }
+
+  .camiseta {
+    width: 46px;
+    height: 46px;
+    font-size: 21px;
+  }
+
+  .camiseta-nombre {
+    font-size: 12.5px;
+  }
+
+  .formacion-suplentes ul {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .formacion-suplentes li {
+    width: auto;
+  }
+
+  .formacion-link.suplente {
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .formacion-link.suplente .camiseta-nombre {
+    background: none;
+    font-size: 14px;
+  }
+}

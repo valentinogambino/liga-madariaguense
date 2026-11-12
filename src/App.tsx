@@ -4,6 +4,7 @@ import { ProveedorEnVivo } from './lib/enVivo';
 import { Club } from './paginas/Club';
 import { Clubes } from './paginas/Clubes';
 import { Comparar } from './paginas/Comparar';
+import { Formacion } from './paginas/Formacion';
 import { Fixture } from './paginas/Fixture';
 import { Inicio } from './paginas/Inicio';
 import { Jugador } from './paginas/Jugador';
@@ -23,6 +24,7 @@ export function App() {
           <Route path="posiciones" element={<Posiciones />} />
           <Route path="clubes" element={<Clubes />} />
           <Route path="clubes/:id" element={<Club />} />
+          <Route path="clubes/:id/formacion" element={<Formacion />} />
           <Route path="jugadores/:id" element={<Jugador />} />
           <Route path="comparar" element={<Comparar />} />
           <Route path="estadisticas" element={<Estadisticas />} />
