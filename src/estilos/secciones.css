@@ -266,7 +266,7 @@
 
 .localidad-cab {
   position: sticky;
-  top: 138px;
+  top: var(--alto-arriba, 138px);
   z-index: 5;
   padding: 6px 0;
   background: var(--fondo);

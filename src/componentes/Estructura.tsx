@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router';
 import { Marcador } from './Marcador';
 
@@ -143,9 +143,20 @@ export function Estructura({ children }: { children?: ReactNode }) {
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [pathname]);
+  // Alto real de la franja fija de arriba, para que los encabezados pegajosos queden justo debajo.
+  const arriba = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = arriba.current;
+    if (!el) return;
+    const medir = () => document.documentElement.style.setProperty('--alto-arriba', `${el.offsetHeight}px`);
+    medir();
+    const obs = new ResizeObserver(medir);
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
   return (
     <>
-      <div className="arriba">
+      <div className="arriba" ref={arriba}>
         <Marcador />
         <Cabecera />
       </div>
