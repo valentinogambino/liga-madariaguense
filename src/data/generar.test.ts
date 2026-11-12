@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { generarLiga } from './generar';
-import { goleadores, partidoEnVivo, tabla, titulosPorClub } from './consultas';
+import { capitan, formacionActual, goleadores, partidoEnVivo, tabla, titulosPorClub } from './consultas';
 
 const liga = generarLiga(2026);
 const golesDe = (evs: { tipo: string; club: string }[], c: string) =>
@@ -91,6 +91,18 @@ describe('generarLiga', () => {
     expect(titulosPorClub(liga)[0]!.anios.length).toBeGreaterThan(3);
     expect(goleadores(liga, 2026, 'Clausura').length).toBeGreaterThan(0);
     expect(liga.sanciones.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('cada club tiene capitán, fundación con el mismo año y una formación de 11', () => {
+    for (const c of liga.clubes) {
+      expect(c.fundacionFecha.slice(0, 4)).toBe(String(c.fundacion));
+      const cap = capitan(liga, c.id);
+      expect(cap?.club).toBe(c.id);
+      expect(capitan(liga, c.id)).toBe(cap);
+      const f = formacionActual(liga, c.id)!;
+      expect(f.titulares).toHaveLength(11);
+      expect(f.titulares.filter(j => j.posicion === 'ARQ')).toHaveLength(1);
+    }
   });
 
   it('genera rápido', () => {

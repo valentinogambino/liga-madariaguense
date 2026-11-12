@@ -31,6 +31,7 @@ export interface Club {
   sigla: string; // tres letras, para el marcador: «COS»
   localidad: Localidad;
   fundacion: number; // año, inventado
+  fundacionFecha: string; // AAAA-MM-DD, inventada; el año coincide con `fundacion`
   estadio: Estadio;
   colores: { primario: string; secundario: string }; // hex, tiñen la ficha
   escudo: string; // ruta pública: /escudos/<id>.png

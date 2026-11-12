@@ -132,6 +132,27 @@ export function plantel(liga: Liga, c: ClubId): Jugador[] {
   return liga.jugadores.filter(j => j.club === c && j.activo).sort((a, b) => orden[a.posicion] - orden[b.posicion] || a.dorsal - b.dorsal);
 }
 
+// Capitán: el jugador activo con más años seguidos en el club; desempata el mayor.
+export function capitan(liga: Liga, c: ClubId): Jugador | undefined {
+  const desde = (j: Jugador) => j.trayectoria[j.trayectoria.length - 1]?.desde ?? 9999;
+  return [...plantel(liga, c)].sort((a, b) => desde(a) - desde(b) || a.nacimiento.localeCompare(b.nacimiento) || a.dorsal - b.dorsal)[0];
+}
+
+export interface FormacionActual {
+  partido: Partido;
+  titulares: Jugador[];
+  suplentes: Jugador[];
+}
+
+// Titulares y suplentes del último partido jugado del club.
+export function formacionActual(liga: Liga, c: ClubId): FormacionActual | undefined {
+  const p = ultimosPartidos(liga, c, 1)[0];
+  const f = p?.formaciones?.[p.local === c ? 'local' : 'visitante'];
+  if (!p || !f) return undefined;
+  const aJugadores = (ids: string[]) => ids.map(id => jugador(liga, id)).filter((j): j is Jugador => !!j);
+  return { partido: p, titulares: aJugadores(f.titulares), suplentes: aJugadores(f.suplentes) };
+}
+
 export function partidosDeClub(liga: Liga, c: ClubId, temporada?: number): Partido[] {
   return liga.partidos.filter(p => (p.local === c || p.visitante === c) && (temporada === undefined || p.temporada === temporada));
 }
