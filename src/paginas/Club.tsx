@@ -65,8 +65,10 @@ export function Club() {
       <div className="destacados">
         <div className="destacado">
           <span className="etiqueta">Fundación</span>
-          <b className="num destacado-num">{t - c.fundacion}</b>
-          <span className="destacado-sub">años · {fechaCompleta(c.fundacionFecha)}</span>
+          <b className="num destacado-num">{c.fundacion}</b>
+          <span className="destacado-sub">
+            {fechaCompleta(c.fundacionFecha).replace(/ de \d{4}$/, '')} · {t - c.fundacion} años
+          </span>
         </div>
         <div className="destacado">
           <span className="etiqueta">Capitán</span>

@@ -1186,6 +1186,26 @@
   text-align: center;
 }
 
+@media (min-width: 900px) {
+  .destacado {
+    padding: 16px 12px;
+    gap: 6px;
+  }
+  .destacado-num {
+    font-size: 64px;
+  }
+  .destacado-sub {
+    font-size: 13px;
+  }
+  .destacado-jugador b {
+    font-size: 18px;
+  }
+  .destacado-silueta svg {
+    width: 76px;
+    height: auto;
+  }
+}
+
 .destacado-silueta .brazalete {
   right: -4px;
   top: 0;
