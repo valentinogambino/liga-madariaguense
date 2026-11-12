@@ -1047,10 +1047,25 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     align-items: stretch;
   }
+  /* Con la foto al lado, el hero se estira: datos arriba y botón abajo, sin hueco en el medio. */
+  .ficha-arriba .club-hero-estadio {
+    display: block;
+  }
+  .ficha-arriba .club-hero {
+    align-content: space-between;
+    padding: 28px 24px 22px;
+  }
 }
 
 .club-hero-boton {
   grid-column: 1 / -1;
+}
+
+.club-hero-estadio {
+  display: none;
+  grid-column: 1 / -1;
+  padding-top: 12px;
+  border-top: 1px solid var(--linea);
 }
 
 .foto-equipo {
@@ -1086,8 +1101,9 @@
   filter: drop-shadow(0 0 1.5px rgb(216 195 155 / 0.75)) drop-shadow(0 6px 8px rgb(0 0 0 / 0.5));
 }
 
+/* La fila de atrás se apoya justo detrás de la de adelante, como en una foto de plantel. */
 .foto-fila.atras {
-  top: 7%;
+  bottom: 34%;
 }
 
 .foto-fila.frente {

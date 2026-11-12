@@ -55,6 +55,11 @@ export function Club() {
               </span>
             </div>
           </div>
+          <p className="club-hero-estadio texto-2">
+            <span className="etiqueta">Estadio</span>
+            <br />
+            <b style={{ color: 'var(--texto)' }}>{c.estadio.nombre}</b> · {c.estadio.direccion}
+          </p>
           <Link to={`/clubes/${c.id}/formacion`} className="boton primario club-hero-boton">
             Formación en cancha →
           </Link>
