@@ -242,49 +242,83 @@
 
 .grilla-clubes {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 156px), 1fr));
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+@media (min-width: 640px) {
+  .grilla-clubes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .grilla-clubes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .grilla-clubes {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.localidad-cab {
+  position: sticky;
+  top: 138px;
+  z-index: 5;
+  padding: 6px 0;
+  background: var(--fondo);
+  border-bottom: 1px solid var(--linea);
 }
 
 .club-tarjeta {
   position: relative;
   display: grid;
-  justify-items: center;
-  gap: 10px;
-  padding: 18px 10px 14px;
-  text-align: center;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 2px;
+  padding: 10px 12px;
   border-radius: var(--r-2);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--club) 18%, var(--superficie)), var(--superficie) 70%);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--club) 20%, var(--superficie)), var(--superficie) 65%);
   border: 1px solid var(--linea);
+  border-left: 3px solid var(--club);
   height: 100%;
   transition: transform 0.35s var(--ease), border-color 0.25s;
 }
 
-.club-tarjeta:hover {
-  transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--club) 60%, transparent);
-}
-
 .club-tarjeta img {
+  grid-row: 1 / span 2;
   transition: transform 0.4s var(--ease);
 }
 
-.club-tarjeta:hover img {
-  transform: scale(1.06) rotate(-2deg);
+.club-tarjeta:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--club) 60%, transparent);
 }
 
-.club-tarjeta b {
-  font-size: 14.5px;
+.club-tarjeta:hover img {
+  transform: scale(1.08) rotate(-2deg);
+}
+
+.club-tarjeta > b {
+  font-size: 15px;
   line-height: 1.2;
 }
 
 .club-datos {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 2px 8px;
+  gap: 0 10px;
   font-size: 11.5px;
   color: var(--apagado);
+}
+
+.club-datos .num {
+  font-size: 14px;
+  color: var(--texto);
 }
 
 .club-hero {
