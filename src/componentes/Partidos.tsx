@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { club, type FilaTabla } from '../data/consultas';
 import { LIGA } from '../data/liga';
 import type { Partido } from '../data/tipos';
@@ -76,6 +76,7 @@ export function Forma({ ultimos, mini = false }: { ultimos: FilaTabla['ultimos']
 }
 
 export function TablaPosiciones({ filas, resumida = false, resaltar }: { filas: FilaTabla[]; resumida?: boolean; resaltar?: string[] }) {
+  const irA = useNavigate();
   return (
     <div className="tabla-envoltorio">
       <table className={`tabla${resumida ? ' resumida' : ''}`}>
@@ -102,11 +103,16 @@ export function TablaPosiciones({ filas, resumida = false, resaltar }: { filas: 
           {filas.map((f, i) => {
             const c = club(LIGA, f.club);
             return (
-              <tr key={f.club} className={resaltar?.includes(f.club) ? 'resaltada' : undefined} style={{ ['--club' as string]: c.colores.primario }}>
+              <tr
+                key={f.club}
+                className={[resaltar?.includes(f.club) ? 'resaltada' : '', resumida ? '' : 'clicable'].filter(Boolean).join(' ') || undefined}
+                style={{ ['--club' as string]: c.colores.primario }}
+                onClick={resumida ? undefined : e => !(e.target as HTMLElement).closest('a') && irA(`/clubes/${c.id}/formacion`)}
+              >
                 <td className="t-pos num">{i + 1}</td>
                 <td className="t-club">
-                  <Link to={`/clubes/${c.id}`}>
-                    <Escudo id={c.id} tam={22} />
+                  <Link to={resumida ? `/clubes/${c.id}` : `/clubes/${c.id}/formacion`} aria-label={resumida ? undefined : `${c.nombre}: ver formación`}>
+                    <Escudo id={c.id} tam={20} />
                     <span>{c.corto}</span>
                   </Link>
                 </td>

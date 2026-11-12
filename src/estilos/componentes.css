@@ -431,14 +431,35 @@
   text-transform: uppercase;
   color: var(--apagado);
   text-align: center;
-  padding: 10px 6px;
+  padding: 8px 5px;
 }
 
 .tabla td {
   text-align: center;
-  padding: 9px 6px;
-  border-top: 1px solid var(--linea);
+  height: 40px;
+  padding: 0 5px;
+  border-top: 1px solid var(--linea-fuerte);
   color: var(--texto-2);
+}
+
+.tabla tbody tr:nth-child(even) td {
+  background: rgb(233 236 230 / 0.03);
+}
+
+.tabla tr.clicable {
+  cursor: pointer;
+}
+
+.tabla tr.clicable:hover td,
+.tabla tr.clicable:focus-within td {
+  background: var(--superficie-2);
+}
+
+@media (min-width: 900px) {
+  .tabla td {
+    height: 44px;
+    padding: 0 8px;
+  }
 }
 
 .tabla .t-club {
@@ -449,7 +470,7 @@
 .tabla td.t-club a {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: var(--texto);
   font-weight: 600;
   white-space: nowrap;
@@ -461,7 +482,7 @@
 
 .tabla .t-pos {
   width: 30px;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--apagado);
   position: relative;
 }
@@ -483,12 +504,13 @@
 }
 
 .tabla .t-pts {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   color: var(--texto);
 }
 
-.tabla tr.resaltada td {
+.tabla tr.resaltada td,
+.tabla tr.resaltada:hover td {
   background: var(--arena-suave);
 }
 

@@ -21,19 +21,12 @@ export function Posiciones() {
   const campeon = LIGA.campeones.find(c => c.anio === temporada);
   const enCurso = temporada === LIGA.ahora.temporada && vista === LIGA.ahora.torneo;
   return (
-    <div className="pila" style={{ gap: 20 }}>
-      <header className="titulo-pagina">
-        <span className="etiqueta">Primera · Temporada {temporada}</span>
-        <h1>Tabla de posiciones</h1>
-        <p>
-          {enCurso
-            ? `En juego: Clausura, fecha ${LIGA.ahora.fecha}. El ganador juega la final con el campeón del Apertura.`
-            : vista === 'Anual'
-              ? 'Suma de Apertura y Clausura.'
-              : 'Torneo terminado.'}
-        </p>
+    <div className="pila" style={{ gap: 12 }}>
+      <header className="titulo-pagina titulo-linea">
+        <h1>Posiciones</h1>
+        <span className="etiqueta">Primera · {temporada}</span>
       </header>
-      <div className="filtros">
+      <div className="filtros filtros-fila">
         <SelectorTemporada valor={temporada} temporadas={temporadas(LIGA)} onCambio={setTemporada} />
         <div className="chips" role="group" aria-label="Torneo">
           {(['Clausura', 'Apertura', 'Anual'] as Vista[]).map(v => (
@@ -46,8 +39,13 @@ export function Posiciones() {
       <div className="tarjeta" style={{ padding: '4px 2px' }}>
         <TablaPosiciones filas={filas} resaltar={[filas[0]?.club ?? '']} />
       </div>
-      <p className="texto-2">
-        Victoria 3 puntos, empate 1. Desempate: diferencia de gol y goles a favor.
+      <p className="texto-2 nota-tabla">
+        {enCurso
+          ? `En juego: Clausura, fecha ${LIGA.ahora.fecha}. El ganador juega la final con el campeón del Apertura. `
+          : vista === 'Anual'
+            ? 'Suma de Apertura y Clausura. '
+            : 'Torneo terminado. '}
+        Tocá un club para ver su formación. Victoria 3 puntos, empate 1. Desempate: diferencia de gol y goles a favor.
         {campeon?.apertura && vista === 'Apertura' && ` Campeón del Apertura: ${club(LIGA, campeon.apertura).nombre}.`}
         {temporada === LIGA.ahora.temporada && vista === 'Apertura' && LIGA.campeonAperturaActual &&
           ` Campeón del Apertura: ${club(LIGA, LIGA.campeonAperturaActual).nombre}.`}

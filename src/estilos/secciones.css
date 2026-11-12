@@ -5,6 +5,53 @@
   gap: 10px;
 }
 
+.filtros-fila {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.filtros-fila .chips {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.filtros-fila .selector-temporada .etiqueta {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+@media (min-width: 560px) {
+  .filtros-fila .selector-temporada .etiqueta {
+    position: static;
+    width: auto;
+    height: auto;
+    clip-path: none;
+  }
+}
+
+.filtros-fila .chip {
+  padding: 7px 12px;
+}
+
+.titulo-linea {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.titulo-linea h1 {
+  font-size: clamp(30px, 8vw, 44px);
+}
+
+.nota-tabla {
+  font-size: 12.5px;
+}
+
 .chips.fechas .chip {
   min-width: 42px;
   font-size: 16px;
